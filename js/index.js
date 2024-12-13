@@ -4,51 +4,67 @@ function getComputerChoice(){
     return arr[choice];
 }
 
-function getHumanChoice(){
-    return (prompt("Enter your choice: Rock, Paper, Scissors"));
-}
-
 let humanScore=0, computerScore=0;
 
-function playRound(humanChoice, compChoice){   
+function playRound(humanChoice){  
+    let compChoice = getComputerChoice(); 
     humanChoice=humanChoice.toLowerCase();
-    console.log(`You selected ${humanChoice}.\nComputer selected ${compChoice}.`)
+    choices.textContent=`You selected ${humanChoice}.\nComputer selected ${compChoice}.`;
     if(humanChoice==compChoice){
-        console.log(`Draw! Both selected ${humanChoice}!`);
-        return 0;
+        stat.textContent=`Draw! Both selected ${humanChoice}!`;
     }
     else if((humanChoice=="rock" && compChoice=="scissors") || (humanChoice=="paper" && compChoice=="rock") || (humanChoice=="scissors" && compChoice=="paper")){
-        console.log(`${humanChoice} beats ${compChoice}! You win!`);
-        return 1;
+        stat.textContent=`${humanChoice} beats ${compChoice}! You win!`;
+        humanScore++;
     }
     else{
-        console.log(`${compChoice} beats ${humanChoice}! You lose!`);
-        return 2;
+        stat.textContent=`${compChoice} beats ${humanChoice}! You lose!`;
+        computerScore++;
+    }
+
+    pScore.textContent=`Your Score: ${humanScore}`;
+    cScore.textContent=`Computer Score: ${computerScore}`;
+
+    if(humanScore>=5 && computerScore<5){
+        winCheck.textContent="You reached 5 points first! You win!";
+    }
+    else if(humanScore<5 && computerScore>=5){
+        winCheck.textContent="Comp reached 5 points first! You lose!";
+    }
+    else if(humanScore>=5 && computerScore>=5){
+        winCheck.textContent="Both win!";
+    }
+    else{
+        winCheck.textContent=`You are ${5-humanScore} points away from victory and Comp is ${5-computerScore} points away from victory!`;
     }
 }
 
-function playGame(){
-    for(let i=0; i<5; i++){
-        console.log(`Player: ${humanScore}\nComputer: ${computerScore}`);
-        let hChoice=getHumanChoice();
-        let cChoice=getComputerChoice();
-        let result=playRound(hChoice,cChoice);
-        if(result==1){
-            humanScore++;
-        }
-        else if(result==2){
-            computerScore++;
-        }
-    }
+const scores=document.querySelector("#scores");
+const stat=document.createElement("p");
+const choices=document.createElement("p");
+scores.appendChild(choices);
+scores.appendChild(stat);
+const pScore=document.createElement("p");
+pScore.textContent=`Your Score: ${humanScore}`;
+const cScore=document.createElement("p");
+cScore.textContent=`Computer Score: ${computerScore}`;
+scores.appendChild(pScore);
+scores.appendChild(cScore);
+const winCheck=document.createElement("p");
+scores.appendChild(winCheck);
 
-    console.log(`Player: ${humanScore}\nComputer: ${computerScore}`);
-    if(humanScore>computerScore){
-        console.log("You win!");
-    }
-    else{
-        console.log("You lose!");
-    }
-}
+const rockButton = document.querySelector("#rock");
+rockButton.addEventListener("click",()=>{
+    playRound("rock");
+});
 
-playGame();
+const paperButton = document.querySelector("#paper");
+paperButton.addEventListener("click",()=>{
+    playRound("paper");
+});
+
+const scissorButton = document.querySelector("#scissors");
+scissorButton.addEventListener("click",()=>{
+    playRound("scissors");
+});
 
